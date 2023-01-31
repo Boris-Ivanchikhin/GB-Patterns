@@ -14,7 +14,7 @@
     void __fastcall WriteToLog(const std::string& str, int n);
     void __fastcall WriteToLog(const std::string& str, double d);
 ```  
-  
+
    Видим функции, которые открывают и закрывают файл для ведения лога, и 3 функции для записи данных в лог-файл.
    Необходимо выполнить рефакторинг этих функций и поместить их внутрь «<b>Одиночки</b>» (<b>FileLoggerSingleton</b>)
    по аналогии с тем, как это было сделано выше для объекта-одиночки <b>ScreenSingleton</b>.
