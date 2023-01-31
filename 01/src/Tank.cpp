@@ -1,8 +1,8 @@
 
 #include <iostream>
 
-#include "Tank.h"
-#include "MyTools.h"
+#include "include/Tank.h"
+#include "include/MyTools.h"
 
 using namespace std;
 using namespace MyTools;
@@ -32,13 +32,14 @@ bool Tank::isInside(double x1, double x2) const
 
 void Tank::Draw() const
 {
-	MyTools::SetColor(CC_Brown);
-	GotoXY(x, y - 3);
+    auto& _screen = MyTools::ScreenSingleton::getInstance();
+	_screen.SetColor(CC_Brown);
+    _screen.GotoXY(x, y - 3);
 	cout << "    #####";
-	GotoXY(x-2, y - 2);
+    _screen.GotoXY(x-2, y - 2);
 	cout << "#######   #";
-	GotoXY(x, y - 1);
+    _screen.GotoXY(x, y - 1);
 	cout << "    #####";
-	GotoXY(x,y);
+    _screen.GotoXY(x,y);
 	cout << " ###########";
 }
