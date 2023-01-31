@@ -2,4 +2,4 @@
 
 ***
 
-Исходный проект <b>SBomber</b> для [MMicrosoft Visual Studio](https://visualstudio.microsoft.com/ru/).  
+Исходный проект <b>SBomber</b> для [Microsoft Visual Studio](https://visualstudio.microsoft.com/ru/).  
