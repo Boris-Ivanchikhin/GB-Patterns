@@ -2,11 +2,13 @@
 
 #include <vector>
 
-#include "LevelGUI.h"
-#include "Plane.h"
-#include "Bomb.h"
-#include "Ground.h"
-#include "Tank.h"
+#include "include/LevelGUI.h"
+#include "include/Plane.h"
+#include "include/Bomb.h"
+#include "include/Ground.h"
+#include "include/Tank.h"
+#include "include/Factory.h"
+#include "include/Commands.h"
 
 class SBomber
 {
@@ -33,6 +35,8 @@ private:
 
     void __fastcall DeleteDynamicObj(DynamicObject * pBomb);
     void __fastcall DeleteStaticObj(GameObject* pObj);
+    void __fastcall CommandExecuter(auto * pCommand);
+
 
     Ground * FindGround() const;
     Plane * FindPlane() const;
@@ -50,4 +54,6 @@ private:
     uint64_t startTime, finishTime, passedTime;
     uint16_t bombsNumber, deltaTime, fps;
     int16_t score;
+
+    AbstractFactory* pFactory;
 };

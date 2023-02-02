@@ -13,3 +13,16 @@ void Bomb::Draw() const
     ScreenSingleton::getInstance().GotoXY(x, y);
     cout << "*";
 }
+
+void BombDecorator::Move(uint16_t time)
+{
+    bomb->Move(time * 1.5);
+}
+
+void BombDecorator::Draw() const
+{
+    bomb->Draw();
+
+    ScreenSingleton::getInstance().GotoXY(bomb->GetX(), bomb->GetY() - 1);
+    cout << "0";
+}

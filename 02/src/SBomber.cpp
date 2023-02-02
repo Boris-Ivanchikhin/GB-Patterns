@@ -4,9 +4,6 @@
 
 #include "include/MyTools.h"
 #include "include/SBomber.h"
-#include "include/Bomb.h"
-#include "include/Ground.h"
-#include "include/Tank.h"
 #include "include/House.h"
 
 using namespace std;
@@ -42,6 +39,10 @@ SBomber::SBomber()
     pGUI->SetFinishX(offset + width - 4);
     vecStaticObj.push_back(pGUI);
 
+    pFactory = new WinterFactory;
+    pFactory->CreateLevel1(vecStaticObj);
+
+    /*
     Ground* pGr = new Ground;
     const uint16_t groundY = maxY - 5;
     pGr->SetPos(offset + 1, groundY);
@@ -62,6 +63,7 @@ SBomber::SBomber()
     pHouse->SetWidth(13);
     pHouse->SetPos(80, groundY - 1);
     vecStaticObj.push_back(pHouse);
+    */
 
     /*
     Bomb* pBomb = new Bomb;
@@ -90,6 +92,8 @@ SBomber::~SBomber()
             delete vecStaticObj[i];
         }
     }
+
+    delete pFactory;
 }
 
 void SBomber::MoveObjects()
@@ -121,14 +125,14 @@ void SBomber::CheckPlaneAndLevelGUI()
     }
 }
 
-void SBomber::CheckBombsAndGround() 
+void SBomber::CheckBombsAndGround()
 {
     vector<Bomb*> vecBombs = FindAllBombs();
     Ground* pGround = FindGround();
     const double y = pGround->GetY();
     for (size_t i = 0; i < vecBombs.size(); i++)
     {
-        if (vecBombs[i]->GetY() >= y) // Ïåðåñå÷åíèå áîìáû ñ çåìëåé
+        if (vecBombs[i]->GetY() >= y) // ÐŸÐµÑ€ÐµÑÐµÑ‡ÐµÐ½Ð¸Ðµ Ð±Ð¾Ð¼Ð±Ñ‹ Ñ Ð·ÐµÐ¼Ð»ÐµÐ¹
         {
             pGround->AddCrater(vecBombs[i]->GetX());
             CheckDestoyableObjects(vecBombs[i]);
@@ -157,6 +161,12 @@ void SBomber::CheckDestoyableObjects(Bomb * pBomb)
 
 void SBomber::DeleteDynamicObj(DynamicObject* pObj)
 {
+    auto *pCommand = new CommandDeleteObj <DynamicObject> ();
+    pCommand->SetVector(&vecDynamicObj);
+    pCommand->SetObject(pObj);
+    CommandExecuter(move (pCommand));
+
+    /*
     auto it = vecDynamicObj.begin();
     for (; it != vecDynamicObj.end(); it++)
     {
@@ -166,10 +176,25 @@ void SBomber::DeleteDynamicObj(DynamicObject* pObj)
             break;
         }
     }
+    */
 }
+
+
+void SBomber::CommandExecuter(auto * pCommand)
+{
+    pCommand->Execute();
+    delete pCommand;
+}
+
 
 void SBomber::DeleteStaticObj(GameObject* pObj)
 {
+    auto *pCommand = new CommandDeleteObj <GameObject> ();
+    pCommand->SetVector(&vecStaticObj);
+    pCommand->SetObject(pObj);
+    CommandExecuter(move (pCommand));
+
+    /*
     auto it = vecStaticObj.begin();
     for (; it != vecStaticObj.end(); it++)
     {
@@ -179,7 +204,9 @@ void SBomber::DeleteStaticObj(GameObject* pObj)
             break;
         }
     }
+    */
 }
+
 
 vector<DestroyableGroundObject*> SBomber::FindDestoyableGroundObjects() const
 {
@@ -347,6 +374,19 @@ void SBomber::TimeFinish()
 
 void SBomber::DropBomb()
 {
+    if (bombsNumber > 0) {
+        auto *pCommand = new CommandDropBomb();
+        pCommand->SetVector(&vecDynamicObj);
+        pCommand->SetPlane(FindPlane());
+        pCommand->SetBombsNumber(bombsNumber);
+
+        CommandExecuter(move (pCommand));
+
+        bombsNumber--;
+        score -= Bomb::BombCost;
+    }
+
+    /*
     if (bombsNumber > 0)
     {
         LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
@@ -365,4 +405,5 @@ void SBomber::DropBomb()
         bombsNumber--;
         score -= Bomb::BombCost;
     }
+    */
 }

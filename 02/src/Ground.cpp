@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstring>
-
 #include "include/MyTools.h"
 #include "include/Ground.h"
 
@@ -11,7 +10,7 @@ using namespace MyTools;
 
 void Crater::Draw() const
 {
-    if (width == SMALL_CRATER_SIZE) // Рисование воронки в 9 символов шириной
+    if (width == SMALL_CRATER_SIZE) // Drawing a funnel 9 characters wide
     {
         ScreenSingleton::getInstance().GotoXY(x - 4, y + 1);
         cout << "==     ==";

@@ -1,5 +1,5 @@
 ﻿// *** Course: GOF Design Patterns
-// *** Lesson 01:  Singleton and Proxy patterns.
+// *** Lesson 02.  Patterns: Abstract factory, Command, Decorator
 
 #include <conio.h>
 
