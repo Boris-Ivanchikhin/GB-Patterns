@@ -9,6 +9,7 @@
 #include "include/Tank.h"
 #include "include/Factory.h"
 #include "include/Commands.h"
+#include "include/BombIterator.h"
 
 class SBomber
 {
@@ -40,15 +41,30 @@ private:
 
     Ground * FindGround() const;
     Plane * FindPlane() const;
-    LevelGUI * FindLevelGUI() const;
+    AbstractLevelGUI * FindLevelGUI() const;
     std::vector<DestroyableGroundObject*> FindDestoyableGroundObjects() const;
-    std::vector<Bomb*> FindAllBombs() const;
+    std::vector<Bomb*> FindAllBombs();
 
     void DropBomb();
 
     std::vector<DynamicObject*> vecDynamicObj;
     std::vector<GameObject*> vecStaticObj;
-    
+
+    // an iterator that is configured to start a vector
+    BombIterator begin ()
+    {
+        BombIterator it(vecDynamicObj);
+        return it;
+    };
+
+    // an iterator that is configured to end a vector
+    BombIterator end()
+    {
+        BombIterator it(vecDynamicObj);
+        it.reset();
+        return it;
+    };
+
     bool exitFlag;
 
     uint64_t startTime, finishTime, passedTime;

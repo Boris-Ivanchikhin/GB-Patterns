@@ -1,5 +1,5 @@
 ﻿// *** Course: GOF Design Patterns
-// *** Lesson 02.  Patterns: Abstract factory, Command, Decorator
+// *** Lesson 03.  Patterns: Strategy, Iterator, Adapter
 
 #include <conio.h>
 

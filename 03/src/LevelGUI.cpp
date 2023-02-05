@@ -7,7 +7,16 @@
 using namespace std;
 using namespace MyTools;
 
-void LevelGUI::Draw() const
+void __fastcall AbstractLevelGUI::SetParam(uint64_t passedTimeNew, uint64_t fpsNew, uint16_t bombsNumberNew, int16_t scoreNew)
+{
+    passedTime = passedTimeNew;
+    fps = fpsNew;
+    bombsNumber = bombsNumberNew;
+    score = scoreNew;
+}
+
+
+void LevelGUI_1::Draw() const
 {
     auto& _screen = ScreenSingleton::getInstance();
     _screen.SetColor(CC_White);
@@ -44,10 +53,4 @@ void LevelGUI::Draw() const
     cout << "Score: " << score;
 }
 
-void __fastcall LevelGUI::SetParam(uint64_t passedTimeNew, uint64_t fpsNew, uint16_t bombsNumberNew, int16_t scoreNew)
-{
-    passedTime = passedTimeNew;
-    fps = fpsNew;
-    bombsNumber = bombsNumberNew;
-    score = scoreNew;
-}
+

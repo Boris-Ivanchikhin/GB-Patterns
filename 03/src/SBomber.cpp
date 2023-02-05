@@ -27,7 +27,7 @@ SBomber::SBomber()
     p->SetPos(5, 10);
     vecDynamicObj.push_back(p);
 
-    LevelGUI* pGUI = new LevelGUI;
+    AbstractLevelGUI* pGUI = new LevelGUI_1;
     pGUI->SetParam(passedTime, fps, bombsNumber, score);
     const uint16_t maxX = ScreenSingleton::getInstance().GetMaxX();
     const uint16_t maxY = ScreenSingleton::getInstance().GetMaxY();
@@ -249,10 +249,15 @@ Ground* SBomber::FindGround() const
     return nullptr;
 }
 
-vector<Bomb*> SBomber::FindAllBombs() const
+vector<Bomb*> SBomber::FindAllBombs()
 {
     vector<Bomb*> vecBombs;
 
+    BombIterator it = SBomber::begin();
+    for (; it != SBomber::end(); ++it)
+        vecBombs.push_back( &(*it) );
+
+    /*
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
         Bomb* pBomb = dynamic_cast<Bomb*>(vecDynamicObj[i]);
@@ -261,6 +266,7 @@ vector<Bomb*> SBomber::FindAllBombs() const
             vecBombs.push_back(pBomb);
         }
     }
+    */
 
     return vecBombs;
 }
@@ -279,11 +285,11 @@ Plane* SBomber::FindPlane() const
     return nullptr;
 }
 
-LevelGUI* SBomber::FindLevelGUI() const
+AbstractLevelGUI* SBomber::FindLevelGUI() const
 {
     for (size_t i = 0; i < vecStaticObj.size(); i++)
     {
-        LevelGUI* p = dynamic_cast<LevelGUI*>(vecStaticObj[i]);
+        LevelGUI_1* p = dynamic_cast<LevelGUI_1*>(vecStaticObj[i]);
         if (p != nullptr)
         {
             return p;
