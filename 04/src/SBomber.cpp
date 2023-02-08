@@ -42,6 +42,10 @@ SBomber::SBomber()
     pFactory = new WinterFactory;
     pFactory->CreateLevel1(vecStaticObj);
 
+    pTreeCreator = new (nothrow) TreeCreatorA;
+
+    pCollDetector = new Lesson_04::CollisionDetector (this, &vecDynamicObj, &vecStaticObj);
+
     /*
     Ground* pGr = new Ground;
     const uint16_t groundY = maxY - 5;
@@ -93,7 +97,14 @@ SBomber::~SBomber()
         }
     }
 
-    delete pFactory;
+    if (pFactory)
+        delete pFactory;
+
+    if (pTreeCreator)
+        delete pTreeCreator;
+
+    if (pCollDetector)
+        delete pCollDetector;
 }
 
 void SBomber::MoveObjects()
@@ -378,6 +389,26 @@ void SBomber::TimeFinish()
     LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
 }
 
+void SBomber::SwitchTree ()
+{
+
+    if (pTreeCreator)
+    {
+        ITreeCreator *newCreator;
+
+        if ( typeid(*pTreeCreator) == typeid(TreeCreatorA) )
+            newCreator = new (nothrow) TreeCreatorB;
+        else
+            newCreator = new (nothrow) TreeCreatorA;
+
+        delete pTreeCreator;
+        pTreeCreator = newCreator;
+    }
+    else
+        pTreeCreator = new (nothrow) TreeCreatorA;
+
+}
+
 void SBomber::DropBomb()
 {
     if (bombsNumber > 0) {
@@ -413,3 +444,5 @@ void SBomber::DropBomb()
     }
     */
 }
+
+

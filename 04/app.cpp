@@ -1,5 +1,5 @@
 ﻿// *** Course: GOF Design Patterns
-// *** Lesson 03.  Patterns: Strategy, Iterator, Adapter
+// *** Lesson 04.  Patterns: Factory Method, Builder, Bridge
 
 #include <conio.h>
 

@@ -10,6 +10,8 @@
 #include "include/Factory.h"
 #include "include/Commands.h"
 #include "include/BombIterator.h"
+#include "include/Tree.h"
+#include "include/CollisionDetector.h"
 
 class SBomber
 {
@@ -19,6 +21,9 @@ public:
     ~SBomber();
     
     inline bool GetExitFlag() const { return exitFlag; }
+    void SetExitFlag(bool exitFlag) { exitFlag = exitFlag; }
+
+    void setExitFlag(bool exitFlag);
 
     void ProcessKBHit();
     void TimeStart();
@@ -27,6 +32,10 @@ public:
     void DrawFrame();
     void MoveObjects();
     void CheckObjects();
+
+    int16_t GetScore() const { return score; };
+
+    void SetScore(int16_t score) { score = score; };
 
 private:
 
@@ -72,4 +81,9 @@ private:
     int16_t score;
 
     AbstractFactory* pFactory;
+
+    ITreeCreator * pTreeCreator;
+    void SwitchTree ();
+
+    Lesson_04::CollisionDetector *pCollDetector;
 };
