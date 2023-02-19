@@ -21,6 +21,11 @@ public:
         cout << "standard house" << endl;
     };
 
+    bool HandleInsideCheck(double x1, double x2) const override
+    {
+        return isInside(x1, x2);
+    };
+
 
 private:
 

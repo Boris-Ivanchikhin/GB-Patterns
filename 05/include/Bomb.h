@@ -1,8 +1,11 @@
 #pragma once
 
-#include "DynamicObject.h"
+#include <vector>
+#include "include/DynamicObject.h"
+#include "include/BombObserver.h"
+#include "include/DestroyableGroundObject.h"
 
-class Bomb : public DynamicObject
+class Bomb : public DynamicObject, public Lesson_05::ISubject
 {
 public:
 
@@ -10,8 +13,16 @@ public:
 
 	void Draw() const override;
 
-private:
+    void Report(Lesson_05::IEventLogger *) override;
 
+    void AddObserver(DestroyableGroundObject *) override;
+
+    void RemoveObserver(DestroyableGroundObject *) override;
+
+    optional<DestroyableGroundObject *> CheckDestoyableObjects() override;
+
+private:
+    vector <DestroyableGroundObject*> observers;
 };
 
 /* =============================================================================================
@@ -26,17 +37,20 @@ private:
  *
  * ============================================================================================= */
 
-class BombDecorator: public DynamicObject
+namespace Lesson_02
 {
-private:
-    DynamicObject *bomb;
+    class BombDecorator: public DynamicObject
+    {
+    private:
+        DynamicObject *bomb;
 
-public:
-    BombDecorator(DynamicObject *_bomb) : bomb(_bomb)
-    {};
-    ~BombDecorator () = default;
+    public:
+        BombDecorator(DynamicObject *_bomb) : bomb(_bomb)
+        {};
+        ~BombDecorator () = default;
 
-    void Move(uint16_t time) override;
-    void Draw() const override;
+        void Move(uint16_t time) override;
+        void Draw() const override;
 
-};
+    };
+}

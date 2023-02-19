@@ -1,4 +1,4 @@
-
+#include "include/SBomber.h"
 #include "include/CollisionDetector.h"
 
 namespace Lesson_04 {
@@ -6,7 +6,7 @@ namespace Lesson_04 {
     // * class Collision {
 
     Plane* Collision::FindPlane() const {
-        for (size_t i = 0; i < vecDynamicObj.size(); i++) {
+        for (size_t i = 0; i < vecDynamicObj->size(); i++) {
             Plane *p = dynamic_cast<Plane *>((*vecDynamicObj)[i]);
             if (p != nullptr) {
                 return p;
@@ -34,9 +34,9 @@ namespace Lesson_04 {
 
     AbstractLevelGUI* Collision::FindLevelGUI() const
     {
-        for (size_t i = 0; i < vecStaticObj.size(); i++)
+        for (size_t i = 0; i < vecStaticObj->size(); i++)
         {
-            LevelGUI_1* p = dynamic_cast<LevelGUI_1*>((vecStaticObj*)[i]);
+            LevelGUI_1* p = dynamic_cast<LevelGUI_1*>((*vecStaticObj)[i]);
             if (p != nullptr)
             {
                 return p;
@@ -50,7 +50,7 @@ namespace Lesson_04 {
     {
         vector<Bomb*> vecBombs;
 
-        for (size_t i = 0; i < vecDynamicObj.size(); i++)
+        for (size_t i = 0; i < vecDynamicObj->size(); i++)
         {
             Bomb* pBomb = dynamic_cast<Bomb*>((*vecDynamicObj)[i]);
             if (pBomb != nullptr)
@@ -78,12 +78,12 @@ namespace Lesson_04 {
 
     void Collision::DeleteStaticObj(GameObject* pObj)
     {
-        auto it = vecStaticObj.begin();
-        for (; it != vecStaticObj.end(); it++)
+        auto it = vecStaticObj->begin();
+        for (; it != vecStaticObj->end(); it++)
         {
             if (*it == pObj)
             {
-                vecStaticObj.erase(it);
+                vecStaticObj->erase(it);
                 break;
             }
         }
@@ -95,7 +95,7 @@ namespace Lesson_04 {
         vector<DestroyableGroundObject*> vec;
         Tank* pTank;
         House* pHouse;
-        for (size_t i = 0; i < vecStaticObj.size(); i++)
+        for (size_t i = 0; i < vecStaticObj->size(); i++)
         {
             pTank = dynamic_cast<Tank*>((*vecStaticObj)[i]);
             if (pTank != nullptr)
@@ -153,7 +153,7 @@ namespace Lesson_04 {
             if (vecDestoyableObjects[i]->isInside(x1, x2))
             {
                 // score += vecDestoyableObjects[i]->GetScore();
-                sBomber->SetScore(sBomber->GetScore() + vecDestoyableObjects[i]->GetScore();
+                sBomber->SetScore(sBomber->GetScore() + vecDestoyableObjects[i]->GetScore());
                 DeleteStaticObj(vecDestoyableObjects[i]);
             }
         }

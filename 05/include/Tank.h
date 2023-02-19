@@ -15,6 +15,11 @@ public:
 
 	void Draw() const override;
 
+    bool HandleInsideCheck(double x1, double x2) const override
+    {
+        return isInside(x1, x2);
+    };
+
 private:
 
 	const uint16_t score = 30;
@@ -90,57 +95,61 @@ private:
  *
  * ============================================================================================= */
 
-class TankAdaptee
+namespace Lesson_03
 {
-public:
+    class TankAdaptee
+    {
+    public:
 
-    TankAdaptee() : x(0.0), y(0.0), width(0) { }
+        TankAdaptee() : x(0.0), y(0.0), width(0) { }
 
-    void Paint() const;
-    bool __fastcall isInRange(double x1, double x2) const;
+        void Paint() const;
+        bool __fastcall isInRange(double x1, double x2) const;
 
-    inline uint16_t GetScore() const { return score; }
+        inline uint16_t GetScore() const { return score; }
 
-    inline void SetPos(double nx, double ny) { x = nx; y = ny; }
-    inline double GetY() const { return y; }
-    inline double GetX() const { return x; }
+        inline void SetPos(double nx, double ny) { x = nx; y = ny; }
+        inline double GetY() const { return y; }
+        inline double GetX() const { return x; }
 
-    inline void SetWidth(uint16_t widthN) { width = widthN; }
-    inline uint16_t GetWidth() const { return width; }
+        inline void SetWidth(uint16_t widthN) { width = widthN; }
+        inline uint16_t GetWidth() const { return width; }
 
-protected:
+    protected:
 
-    double x, y;
-    uint16_t width;
-    const uint16_t score = 30;
-};
-
-
-class TankAdapter : public DestroyableGroundObject
-{
-private:
-    TankAdaptee *tank;
-
-public:
-
-    TankAdapter() : DestroyableGroundObject() {tank = new TankAdaptee();};
-    ~TankAdapter() {delete tank;};
-
-    void Draw() const {tank->Paint();};
-
-    bool __fastcall isInRange(double x1, double x2) const;
-
-    inline uint16_t GetScore() const {return tank->GetScore();};
-
-    inline double GetY() const override {return tank->GetY();};
-    inline double GetX() const override {return tank->GetY();};
-
-    uint16_t GetWidth() const override {return tank->GetWidth();};
-    void SetWidth(uint16_t widthN) override {tank->SetWidth(widthN);};
-
-    void SetPos(double nx, double ny) override {tank->SetPos(nx, ny);};
-
-    bool isInside(double x1, double x2) const override {
-        return tank->isInRange(x1, x2);
+        double x, y;
+        uint16_t width;
+        const uint16_t score = 30;
     };
-};
+
+
+    class TankAdapter : public DestroyableGroundObject
+    {
+    private:
+        TankAdaptee *tank;
+
+    public:
+
+        TankAdapter() : DestroyableGroundObject() {tank = new TankAdaptee();};
+        ~TankAdapter() {delete tank;};
+
+        void Draw() const {tank->Paint();};
+
+        bool __fastcall isInRange(double x1, double x2) const;
+
+        inline uint16_t GetScore() const {return tank->GetScore();};
+
+        inline double GetY() const override {return tank->GetY();};
+        inline double GetX() const override {return tank->GetY();};
+
+        uint16_t GetWidth() const override {return tank->GetWidth();};
+        void SetWidth(uint16_t widthN) override {tank->SetWidth(widthN);};
+
+        void SetPos(double nx, double ny) override {tank->SetPos(nx, ny);};
+
+        bool isInside(double x1, double x2) const override {
+            return tank->isInRange(x1, x2);
+        };
+    };
+
+}

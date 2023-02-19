@@ -5,11 +5,23 @@
 #include <iostream>
 #include <vector>
 
-#include "include/SBomber.h"
+#include "include/DynamicObject.h"
+#include "include/Bomb.h"
+#include "include/Plane.h"
+#include "include/Ground.h"
+#include "include/DestroyableGroundObject.h"
+#include "include/LevelGUI.h"
 
 using namespace std;
 
 class SBomber;
+//class GameObject;
+//class DynamicObject;
+//class Ground;
+//class Bomb;
+//class Plane;
+//class AbstractLevelGUI;
+//class DestroyableGroundObject;
 
 /* =============================================================================================
  * *** Lesson 04.  Patterns: Factory Method, Builder, Bridge

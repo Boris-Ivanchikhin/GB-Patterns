@@ -20,3 +20,8 @@ void Plane::Draw() const
     _screen.GotoXY(x + 3, y + 1);
     cout << "////";
 }
+
+void Plane::Report(Lesson_05::IEventLogger *logger)
+{
+    logger->WriteEvent(this);
+}

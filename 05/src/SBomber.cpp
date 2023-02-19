@@ -111,11 +111,14 @@ void SBomber::MoveObjects()
 {
     LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
+    Lesson_05::MoveEventLogger moveEvent;
+
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
         if (vecDynamicObj[i] != nullptr)
         {
             vecDynamicObj[i]->Move(deltaTime);
+            vecDynamicObj[i]->Report(&moveEvent);
         }
     }
 };
@@ -145,9 +148,22 @@ void SBomber::CheckBombsAndGround()
     {
         if (vecBombs[i]->GetY() >= y) // Пересечение бомбы с землей
         {
+            /*
             pGround->AddCrater(vecBombs[i]->GetX());
             CheckDestoyableObjects(vecBombs[i]);
             DeleteDynamicObj(vecBombs[i]);
+            */
+
+            {// *** Lesson 05
+                pGround->AddCrater(vecBombs[i]->GetX());
+                auto DestoyableObject = vecBombs[i]->CheckDestoyableObjects();
+                if (DestoyableObject)
+                {
+                    score += DestoyableObject.value()->GetScore();
+                    DeleteStaticObj(DestoyableObject.value());
+                }
+                DeleteDynamicObj(vecBombs[i]);
+            }
         }
     }
 
@@ -172,12 +188,15 @@ void SBomber::CheckDestoyableObjects(Bomb * pBomb)
 
 void SBomber::DeleteDynamicObj(DynamicObject* pObj)
 {
-    auto *pCommand = new CommandDeleteObj <DynamicObject> ();
-    pCommand->SetVector(&vecDynamicObj);
-    pCommand->SetObject(pObj);
-    CommandExecuter(move (pCommand));
+    {// *** Lesson 02
+        /*
+        auto *pCommand = new CommandDeleteObj <DynamicObject> ();
+        pCommand->SetVector(&vecDynamicObj);
+        pCommand->SetObject(pObj);
+        CommandExecuter(move (pCommand));
+        */
+    }
 
-    /*
     auto it = vecDynamicObj.begin();
     for (; it != vecDynamicObj.end(); it++)
     {
@@ -187,7 +206,17 @@ void SBomber::DeleteDynamicObj(DynamicObject* pObj)
             break;
         }
     }
-    */
+
+    {// *** Lesson 05
+        vector<Bomb*> vecBombs = FindAllBombs();
+        for (auto& pBomb : vecBombs)
+        {
+            auto pObserver = dynamic_cast<DestroyableGroundObject*>(pObj);
+            if (pObserver)
+                pBomb->RemoveObserver(pObserver);
+        }
+    }
+
 }
 
 
@@ -200,12 +229,15 @@ void SBomber::CommandExecuter(auto * pCommand)
 
 void SBomber::DeleteStaticObj(GameObject* pObj)
 {
-    auto *pCommand = new CommandDeleteObj <GameObject> ();
-    pCommand->SetVector(&vecStaticObj);
-    pCommand->SetObject(pObj);
-    CommandExecuter(move (pCommand));
+    {// *** Lesson 02
+        /*
+        auto *pCommand = new CommandDeleteObj <GameObject> ();
+        pCommand->SetVector(&vecStaticObj);
+        pCommand->SetObject(pObj);
+        CommandExecuter(move (pCommand));
+        */
+    }
 
-    /*
     auto it = vecStaticObj.begin();
     for (; it != vecStaticObj.end(); it++)
     {
@@ -215,7 +247,17 @@ void SBomber::DeleteStaticObj(GameObject* pObj)
             break;
         }
     }
-    */
+
+    {// *** Lesson 05
+        vector<Bomb*> vecBombs = FindAllBombs();
+        for (auto& pBomb : vecBombs)
+        {
+            auto pObserver = dynamic_cast<DestroyableGroundObject*>(pObj);
+            if (pObserver)
+                pBomb->RemoveObserver(pObserver);
+        }
+    }
+
 }
 
 
@@ -411,19 +453,23 @@ void SBomber::SwitchTree ()
 
 void SBomber::DropBomb()
 {
-    if (bombsNumber > 0) {
-        auto *pCommand = new CommandDropBomb();
-        pCommand->SetVector(&vecDynamicObj);
-        pCommand->SetPlane(FindPlane());
-        pCommand->SetBombsNumber(bombsNumber);
+    {   // *** Lesson_02
+        /*
+        if (bombsNumber > 0) {
+            auto *pCommand = new Lesson_02::CommandDropBomb();
+            pCommand->SetVector(&vecDynamicObj);
+            pCommand->SetPlane(FindPlane());
+            pCommand->SetBombsNumber(bombsNumber);
 
-        CommandExecuter(move (pCommand));
+            CommandExecuter(move (pCommand));
 
-        bombsNumber--;
-        score -= Bomb::BombCost;
+            bombsNumber--;
+            score -= Bomb::BombCost;
+        }
+        */
     }
 
-    /*
+
     if (bombsNumber > 0)
     {
         LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
@@ -441,8 +487,14 @@ void SBomber::DropBomb()
         vecDynamicObj.push_back(pBomb);
         bombsNumber--;
         score -= Bomb::BombCost;
+
+        {   // *** Lesson 05
+            vector<DestroyableGroundObject*> vecDestoyableObjects = FindDestoyableGroundObjects();
+            for (auto& observer : vecDestoyableObjects)
+                pBomb->AddObserver(observer);
+        }
     }
-    */
+
 }
 
 

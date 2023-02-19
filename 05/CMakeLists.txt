@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(SBomber-04)
+project(SBomber-05)
 
 set(CMAKE_CXX_STANDARD 20)
 
