@@ -7,9 +7,22 @@
 using namespace std;
 using namespace MyTools;
 
+optional<string> LevelGUI::GetMessage () const
+{
+    if (messages.size())
+    {
+        string msg = *(messages.begin());
+        messages.erase(messages.begin());
+        // return
+        return msg;
+    }
+    // return
+    return nullopt;
+};
+
 void LevelGUI::Draw() const
 {
-    auto& _screen = ScreenSingleton::getInstance();
+    auto& _screen = Lesson_01::ScreenSingleton::getInstance();
     _screen.SetColor(CC_White);
 
     _screen.GotoXY(x, y);
@@ -42,6 +55,14 @@ void LevelGUI::Draw() const
     cout << "BombsNum: " << bombsNumber;
     _screen.GotoXY(62, 1);
     cout << "Score: " << score;
+
+    auto msg = GetMessage();
+    if (msg.has_value())
+    {
+        const uint16_t maxY = _screen.GetMaxY();
+        _screen.GotoXY(3, maxY - 3);
+        cout << msg.value();
+    }
 }
 
 void __fastcall LevelGUI::SetParam(uint64_t passedTimeNew, uint64_t fpsNew, uint16_t bombsNumberNew, int16_t scoreNew)

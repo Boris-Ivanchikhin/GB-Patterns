@@ -22,7 +22,7 @@ SBomber::SBomber()
     bombsNumber(10),
     score(0)
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     Plane* p = new Plane;
     p->SetDirection(1, 0.1);
@@ -32,8 +32,8 @@ SBomber::SBomber()
 
     LevelGUI* pGUI = new LevelGUI;
     pGUI->SetParam(passedTime, fps, bombsNumber, score);
-    const uint16_t maxX = ScreenSingleton::getInstance().GetMaxX();
-    const uint16_t maxY = ScreenSingleton::getInstance().GetMaxY();
+    const uint16_t maxX = Lesson_01::ScreenSingleton::getInstance().GetMaxX();
+    const uint16_t maxY = Lesson_01::ScreenSingleton::getInstance().GetMaxY();
     const uint16_t offset = 3;
     const uint16_t width = maxX - 7;
     pGUI->SetPos(offset, offset);
@@ -48,12 +48,16 @@ SBomber::SBomber()
     pGr->SetWidth(width - 2);
     vecStaticObj.push_back(pGr);
 
+    _mediator = new Lesson_06::TankMediator(pGUI);
+
     Tank* pTank = new Tank;
+    pTank->SetMediator (_mediator);
     pTank->SetWidth(13);
     pTank->SetPos(30, groundY - 1);
     vecStaticObj.push_back(pTank);
 
     pTank = new Tank;
+    pTank->SetMediator (_mediator);
     pTank->SetWidth(13);
     pTank->SetPos(50, groundY - 1);
     vecStaticObj.push_back(pTank);
@@ -90,11 +94,13 @@ SBomber::~SBomber()
             delete vecStaticObj[i];
         }
     }
+
+    delete _mediator;
 }
 
 void SBomber::MoveObjects()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -107,7 +113,7 @@ void SBomber::MoveObjects()
 
 void SBomber::CheckObjects()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     CheckPlaneAndLevelGUI();
     CheckBombsAndGround();
@@ -128,7 +134,7 @@ void SBomber::CheckBombsAndGround()
     const double y = pGround->GetY();
     for (size_t i = 0; i < vecBombs.size(); i++)
     {
-        if (vecBombs[i]->GetY() >= y) // Пересечение бомбы с землей
+        if (vecBombs[i]->GetY() >= y) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         {
             pGround->AddCrater(vecBombs[i]->GetX());
             CheckDestoyableObjects(vecBombs[i]);
@@ -275,7 +281,7 @@ void SBomber::ProcessKBHit()
         c = _getch();
     }
 
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
 
     switch (c) {
 
@@ -306,7 +312,7 @@ void SBomber::ProcessKBHit()
 
 void SBomber::DrawFrame()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -324,7 +330,7 @@ void SBomber::DrawFrame()
         }
     }
 
-    ScreenSingleton::getInstance().GotoXY(0, 0);
+    Lesson_01::ScreenSingleton::getInstance().GotoXY(0, 0);
     fps++;
 
     FindLevelGUI()->SetParam(passedTime, fps, bombsNumber, score);
@@ -332,7 +338,7 @@ void SBomber::DrawFrame()
 
 void SBomber::TimeStart()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
     startTime = GetTickCount64();
 }
 
@@ -342,14 +348,14 @@ void SBomber::TimeFinish()
     deltaTime = uint16_t(finishTime - startTime);
     passedTime += deltaTime;
 
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
 }
 
 void SBomber::DropBomb()
 {
     if (bombsNumber > 0)
     {
-        LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+        Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
         Plane* pPlane = FindPlane();
         double x = pPlane->GetX() + 4;

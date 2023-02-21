@@ -1,11 +1,13 @@
 
-#include <iostream>
+#include <random>
 
 #include "include/Tank.h"
 #include "include/MyTools.h"
 
 using namespace std;
 using namespace MyTools;
+
+TankMediator* Tank::mediator = nullptr;
 
 bool Tank::isInside(double x1, double x2) const
 {
@@ -32,7 +34,7 @@ bool Tank::isInside(double x1, double x2) const
 
 void Tank::Draw() const
 {
-    auto& _screen = MyTools::ScreenSingleton::getInstance();
+    auto& _screen = MyTools::Lesson_01::ScreenSingleton::getInstance();
 	_screen.SetColor(CC_Brown);
     _screen.GotoXY(x, y - 3);
 	cout << "    #####";
@@ -42,4 +44,27 @@ void Tank::Draw() const
 	cout << "    #####";
     _screen.GotoXY(x,y);
 	cout << " ###########";
+
+    if (Elapsed() > Timeout)
+    {
+		string msg{};
+		// distribution int of RNG
+		uniform_int_distribution <int> RNG_INT(0, 20);
+		// create & initialize RNG
+		mt19937 gen {random_device()()};
+		// choice phrase
+		if ( RNG_INT(gen) >= 10)
+			msg = "we are the champions!";
+		else
+			msg = "mammy!!!";
+		// notify
+		if (mediator)
+		{
+			mediator->Notify(msg);
+			start = clock_t::now();
+		}
+
+    }
 }
+
+
