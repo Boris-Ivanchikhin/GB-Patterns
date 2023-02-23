@@ -1,4 +1,6 @@
-﻿
+﻿// *** Course: GOF Design Patterns
+// *** Lesson  07. Patterns: Memento, RAII and PIMPL
+
 #include <conio.h>
 
 #include "SBomber.h"
@@ -10,7 +12,7 @@ using namespace std;
 
 int main(void)
 {
-    MyTools::OpenLogFile("log.txt");
+    //MyTools::OpenLogFile("log.txt");
 
     SBomber game;
 
@@ -32,7 +34,7 @@ int main(void)
 
     } while (!game.GetExitFlag());
 
-    MyTools::CloseLogFile();
+    //MyTools::CloseLogFile();
 
     return 0;
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 #include "MyTools.h"
 #include "Ground.h"
@@ -10,7 +11,7 @@ using namespace MyTools;
 
 void Crater::Draw() const
 {
-    if (width == SMALL_CRATER_SIZE) // Рисование воронки в 9 символов шириной
+    if (width == SMALL_CRATER_SIZE) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 9 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     {
         GotoXY(x - 4, y + 1);
         cout << "==     ==";

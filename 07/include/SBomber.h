@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <string>
 #include <vector>
 
 #include "LevelGUI.h"
@@ -7,6 +9,7 @@
 #include "Bomb.h"
 #include "Ground.h"
 #include "Tank.h"
+#include "MyTools.h"
 
 class SBomber
 {
@@ -15,7 +18,7 @@ public:
     SBomber();
     ~SBomber();
     
-    inline bool GetExitFlag() const { return exitFlag; }
+    bool GetExitFlag() const;
 
     void ProcessKBHit();
     void TimeStart();
@@ -27,6 +30,10 @@ public:
 
 private:
 
+    class SBomberImpl;
+    SBomberImpl *pImpl;
+
+    /*
     void CheckPlaneAndLevelGUI();
     void CheckBombsAndGround();
     void __fastcall CheckDestoyableObjects(Bomb* pBomb);
@@ -50,4 +57,5 @@ private:
     uint64_t startTime, finishTime, passedTime;
     uint16_t bombsNumber, deltaTime, fps;
     int16_t score;
+    */
 };
