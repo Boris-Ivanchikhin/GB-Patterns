@@ -1,6 +1,7 @@
 
 #include <conio.h>
 #include <windows.h>
+#include <cmath>
 
 #include "include/MyTools.h"
 #include "include/SBomber.h"
@@ -22,7 +23,7 @@ SBomber::SBomber()
     bombsNumber(10),
     score(0)
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     Plane* p = new Plane;
     p->SetDirection(1, 0.1);
@@ -32,8 +33,8 @@ SBomber::SBomber()
 
     LevelGUI* pGUI = new LevelGUI;
     pGUI->SetParam(passedTime, fps, bombsNumber, score);
-    const uint16_t maxX = ScreenSingleton::getInstance().GetMaxX();
-    const uint16_t maxY = ScreenSingleton::getInstance().GetMaxY();
+    const uint16_t maxX = Lesson_01::ScreenSingleton::getInstance().GetMaxX();
+    const uint16_t maxY = Lesson_01::ScreenSingleton::getInstance().GetMaxY();
     const uint16_t offset = 3;
     const uint16_t width = maxX - 7;
     pGUI->SetPos(offset, offset);
@@ -94,7 +95,7 @@ SBomber::~SBomber()
 
 void SBomber::MoveObjects()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -107,7 +108,7 @@ void SBomber::MoveObjects()
 
 void SBomber::CheckObjects()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     CheckPlaneAndLevelGUI();
     CheckBombsAndGround();
@@ -128,7 +129,7 @@ void SBomber::CheckBombsAndGround()
     const double y = pGround->GetY();
     for (size_t i = 0; i < vecBombs.size(); i++)
     {
-        if (vecBombs[i]->GetY() >= y) // ����������� ����� � ������
+        if (vecBombs[i]->GetY() >= y) // ����������� ����� � ������
         {
             pGround->AddCrater(vecBombs[i]->GetX());
             CheckDestoyableObjects(vecBombs[i]);
@@ -275,7 +276,7 @@ void SBomber::ProcessKBHit()
         c = _getch();
     }
 
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
 
     switch (c) {
 
@@ -306,7 +307,7 @@ void SBomber::ProcessKBHit()
 
 void SBomber::DrawFrame()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -324,7 +325,7 @@ void SBomber::DrawFrame()
         }
     }
 
-    ScreenSingleton::getInstance().GotoXY(0, 0);
+    Lesson_01::ScreenSingleton::getInstance().GotoXY(0, 0);
     fps++;
 
     FindLevelGUI()->SetParam(passedTime, fps, bombsNumber, score);
@@ -332,7 +333,7 @@ void SBomber::DrawFrame()
 
 void SBomber::TimeStart()
 {
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
     startTime = GetTickCount64();
 }
 
@@ -342,14 +343,14 @@ void SBomber::TimeFinish()
     deltaTime = uint16_t(finishTime - startTime);
     passedTime += deltaTime;
 
-    LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
 }
 
 void SBomber::DropBomb()
 {
     if (bombsNumber > 0)
     {
-        LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+        Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
         Plane* pPlane = FindPlane();
         double x = pPlane->GetX() + 4;
@@ -365,4 +366,86 @@ void SBomber::DropBomb()
         bombsNumber--;
         score -= Bomb::BombCost;
     }
+}
+
+/* =============================================================================================
+ *  *** Lesson  08. Patterns: State and Prototype
+ *
+ * 2(*). Анимированный скроллинг.
+ *      Задача: Добавить в конец игры анимированную прокрутку титров со списком создателей.
+ *      Предположим, проект SBomber создан группой разработчиков и дизайнеров. Любое нажатие на клавиатуре прервёт прокрутку титров.
+ *      Как и в самой игре, воспользуемся готовыми функциями:
+ *      ● TimeStart();
+ *      ● MyTools::ClrScr();
+ *      ● MyTools::GotoXY(x, y);
+ *      ● TimeFinish();
+ *      Сделаем так, чтобы скорость анимации прокрутки зависела от времени, потраченного на рисование одного кадра.
+ *      Закончите алгоритм void SBomber::AnimateScrolling().
+ *      Функция AnimateScrolling() должна вызываться из main после основного цикла игры.
+ *
+ * ============================================================================================= */
+
+namespace Lesson_08
+{
+    static const size_t ScrollHeight = 30;
+    static const size_t ScrollWidth = 30;
+    static const char* ppScroll[ScrollHeight] =
+            {"                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "     Project manager:         ",
+             "         Ivan Vasilevich      ",
+             "                              ",
+             "     Developers:              ",
+             "         Nikolay Gavrilov     ",
+             "         Dmitriy Sidelnikov   ",
+             "         Eva Brown            ",
+             "                              ",
+             "     Designers:               ",
+             "         Anna Pachenkova      ",
+             "         Elena Shvaiber       ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              ",
+             "                              "};
+
+};
+
+void SBomber::AnimateScrolling()
+{
+    Lesson_01::LoggerSingleton::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
+    auto& _screen = MyTools::Lesson_01::ScreenSingleton::getInstance();
+    const size_t windowHeight = 10; // Scrolling window size
+    const size_t startX = _screen.GetMaxX() / 2 - Lesson_08::ScrollWidth / 2;
+    const size_t startY = _screen.GetMaxY() / 2 - windowHeight / 2;
+    double curPos = 0;
+    do {
+        TimeStart();
+        _screen.ClrScr();
+        // вывод windowHeight строк из ppScroll используя смещение curPos
+        _screen.GotoXY(startX, startY);
+
+        int start_idx = static_cast<int> (lround(curPos) % Lesson_08::ScrollHeight);
+        for (int i = 0; i < windowHeight; ++i)
+        {
+            int cur_idx = (start_idx + i) % Lesson_08::ScrollHeight;
+            cout << Lesson_08::ppScroll [cur_idx] << endl;
+        }
+        _screen.GotoXY(0, 0);
+        TimeFinish();
+        curPos += deltaTime * 0.0015;
+    } while (!_kbhit() && int(curPos) <= (Lesson_08::ScrollHeight - windowHeight));
+    _screen.ClrScr();
 }

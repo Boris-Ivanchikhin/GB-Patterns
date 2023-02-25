@@ -32,7 +32,7 @@ bool House::isInside(double x1, double x2) const
 
 void House::Draw() const
 {
-    auto& _screen = ScreenSingleton::getInstance();
+    auto& _screen = Lesson_01::ScreenSingleton::getInstance();
     _screen.SetColor(CC_Yellow);
     _screen.GotoXY(x, y - 5);
 	cout << "  ########  ";

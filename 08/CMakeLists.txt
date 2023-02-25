@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
-project(SBomber-01)
+project(SBomber-08)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -9,9 +9,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(include)
 #include_directories(src)
 
-set(SOURCE_FILES
-	app.cpp
-    )
+set(SOURCE_FILES app.cpp)
 
 file(GLOB SOURCES
 	*.h

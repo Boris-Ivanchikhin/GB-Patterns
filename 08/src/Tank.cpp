@@ -32,7 +32,7 @@ bool Tank::isInside(double x1, double x2) const
 
 void Tank::Draw() const
 {
-    auto& _screen = MyTools::ScreenSingleton::getInstance();
+    auto& _screen = MyTools::Lesson_01::ScreenSingleton::getInstance();
 	_screen.SetColor(CC_Brown);
     _screen.GotoXY(x, y - 3);
 	cout << "    #####";

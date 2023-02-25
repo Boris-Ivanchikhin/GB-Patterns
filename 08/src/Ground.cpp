@@ -11,11 +11,11 @@ using namespace MyTools;
 
 void Crater::Draw() const
 {
-    if (width == SMALL_CRATER_SIZE) // Рисование воронки в 9 символов шириной
+    if (width == SMALL_CRATER_SIZE) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 9 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     {
-        ScreenSingleton::getInstance().GotoXY(x - 4, y + 1);
+        Lesson_01::ScreenSingleton::getInstance().GotoXY(x - 4, y + 1);
         cout << "==     ==";
-        ScreenSingleton::getInstance().GotoXY(x - 2, y + 2);
+        Lesson_01::ScreenSingleton::getInstance().GotoXY(x - 2, y + 2);
         cout << "=====";
     }
 }
@@ -35,7 +35,7 @@ bool Crater::isInside(double xn) const
 
 void Ground::Draw() const
 {
-    auto& _screen = MyTools::ScreenSingleton::getInstance();
+    auto& _screen = MyTools::Lesson_01::ScreenSingleton::getInstance();
     _screen.SetColor(CC_Green);
 
     const size_t bufSize = width + 1;

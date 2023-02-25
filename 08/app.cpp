@@ -1,5 +1,5 @@
 ﻿// *** Course: GOF Design Patterns
-// *** Lesson 01:  Singleton and Proxy patterns.
+// *** Lesson  08. Patterns: State and Prototype
 
 #include <conio.h>
 
@@ -28,7 +28,7 @@ int main(void)
         puts ("post- function registration error!");
     }
 
-    MyTools::LoggerSingleton::getInstance().OpenLogFile("log.txt");
+    MyTools::Lesson_01::LoggerSingleton::getInstance().OpenLogFile("log.txt");
 
     SBomber game;
 
@@ -40,7 +40,7 @@ int main(void)
             game.ProcessKBHit();
         }
 
-        MyTools::ScreenSingleton::getInstance().ClrScr();
+        MyTools::Lesson_01::ScreenSingleton::getInstance().ClrScr();
 
         game.DrawFrame();
         game.MoveObjects();
@@ -50,7 +50,9 @@ int main(void)
 
     } while (!game.GetExitFlag());
 
-    MyTools::LoggerSingleton::getInstance().CloseLogFile();
+    game.AnimateScrolling(); // Calling animated scrolling
+
+    MyTools::Lesson_01::LoggerSingleton::getInstance().CloseLogFile();
 
     // return o.k.
     return EXIT_SUCCESS;

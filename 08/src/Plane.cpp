@@ -9,7 +9,7 @@ using namespace MyTools;
 
 void Plane::Draw() const
 {
-    auto& _screen = ScreenSingleton::getInstance();
+    auto& _screen = Lesson_01::ScreenSingleton::getInstance();
     _screen.SetColor(CC_LightBlue);
     _screen.GotoXY(x, y);
     cout << "=========>";
